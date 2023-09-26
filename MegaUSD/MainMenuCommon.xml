@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mainMenu>
+	<menuBar>
+		
+		<subMenu id="megascans_USD_menu">
+			<label>MegaUSD</label>
+			<insertAfter>help_menu</insertAfter>
+
+			<separatorItem />
+		
+	  <scriptItem id="megascans_USD">
+        <label>Megascan USD Plugin</label>
+        <scriptCode><![CDATA[
+import MegaUSDPlugin.MegaUSDui as mUSDui
+try:
+    # Python 3.7+
+    from importlib import reload
+except:
+    # Python 2.7
+    pass
+reload(mUSDui)
+mUSDui.startPlugin()]]></scriptCode>
+      </scriptItem>
+        </subMenu>
+    </menuBar>
+</mainMenu>
