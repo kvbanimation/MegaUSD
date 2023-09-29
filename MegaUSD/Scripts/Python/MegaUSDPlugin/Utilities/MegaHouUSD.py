@@ -239,11 +239,11 @@ class MegascanUSD():
         # CREATE MTLX
 
         # Create the MtlX subnet node in the component builder material library
-        mtlxSubNet = matLib.createNode('subnet')
-        mtlxSubNet.setName(self.objName + '_mtlx')
+        self.mtlxSubNet = matLib.createNode('subnet')
+        self.mtlxSubNet.setName(self.objName + '_mtlx')
 
         # Create the surface output node, rename it, and set its color to salmon
-        surfOut = mtlxSubNet.createNode('subnetconnector')
+        surfOut = self.mtlxSubNet.createNode('subnetconnector')
         surfOut.setName('surface_output')
         salmon = hou.Color((0.996, 0.682, 0.682))
         surfOut.setColor(salmon)
@@ -255,7 +255,7 @@ class MegascanUSD():
         surfOut.parm('parmtype').set('surface')
 
         # Create the displacement output node, rename it, and set its color to lavender
-        dispOut = mtlxSubNet.createNode('subnetconnector')
+        dispOut = self.mtlxSubNet.createNode('subnetconnector')
         dispOut.setName('displacement_output')
         lavender = hou.Color((0.565, 0.494, 0.863))
         dispOut.setColor(lavender)
@@ -267,35 +267,16 @@ class MegascanUSD():
         dispOut.parm('parmtype').set('displacement')
 
         # Create the materialX surface shader node
-        mtlxStdSurf = mtlxSubNet.createNode('mtlxstandard_surface')
+        mtlxStdSurf = self.mtlxSubNet.createNode('mtlxstandard_surface')
 
         # Create a tuple of each texture that needs importing
         texNames = ('Albedo', 'Roughness', 'Normal', 'Displacement')
-
-        #============================================================================================================================================================================
-        def createMtlxImage(texName, nodeLoc=mtlxSubNet, fileDir=self.inPath, megaName=self.megaName):
-            # Create the mtlx image node to import file to
-            mtlxImage = nodeLoc.createNode('mtlximage')
-            mtlxImage.setName(texName)
-            
-            # Use an if statement (with an elif) to single out differences with normal and displacement file names
-            # Then set file name
-            if (texName == 'Normal'):
-                mtlxImage.parm('file').set(fileDir + megaName + '_4K_' + texName + '_LOD0.jpg')
-            elif (texName == 'Displacement'):
-                mtlxImage.parm('file').set(fileDir + megaName + '_4K_' + texName + '.exr')
-            else:
-                mtlxImage.parm('file').set(fileDir + megaName + '_4K_' + texName + '.jpg')
-            
-            # Return the mtlx image node
-            return mtlxImage
-        #============================================================================================================================================================================
     
         # Create each imported image node
-        albedoImg = createMtlxImage(texNames[0])
-        roughnessImg = createMtlxImage(texNames[1])
-        normalImg = createMtlxImage(texNames[2])
-        displacementImg = createMtlxImage(texNames[3])
+        albedoImg = self.createMtlxImage(texNames[0])
+        roughnessImg = self.createMtlxImage(texNames[1])
+        normalImg = self.createMtlxImage(texNames[2])
+        displacementImg = self.createMtlxImage(texNames[3])
 
         # CONNECT TEXTURE PATHS------------------------------------------------------------------------------------------------------------------------------------------------------
         #----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -308,7 +289,7 @@ class MegascanUSD():
         # CONNECT THE ROUGHNESS IMAGE NODE
 
         # Create a vector3 to 3float
-        mtlxSep3c = mtlxSubNet.createNode('mtlxseparate3c')
+        mtlxSep3c = self.mtlxSubNet.createNode('mtlxseparate3c')
 
         # Connect the nodes
         mtlxStdSurf.setInput(6, mtlxSep3c)
@@ -318,7 +299,7 @@ class MegascanUSD():
         # CONNECT THE NORMAL IMAGE NODE
 
         # Create a mtlx normal map node
-        mtlxNormMap = mtlxSubNet.createNode('mtlxnormalmap')
+        mtlxNormMap = self.mtlxSubNet.createNode('mtlxnormalmap')
 
         # Connect the nodes
         mtlxStdSurf.setInput(40, mtlxNormMap)
@@ -328,9 +309,9 @@ class MegascanUSD():
         # CONNECT THE DISPLACEMENT IMAGE NODE
 
         # Create a vector3 to 3float, mtlx remap, mtlx displacement
-        mtlxSep3c2 = mtlxSubNet.createNode('mtlxseparate3c')
-        mtlxRemap = mtlxSubNet.createNode('mtlxremap')
-        mtlxDisp = mtlxSubNet.createNode('mtlxdisplacement')
+        mtlxSep3c2 = self.mtlxSubNet.createNode('mtlxseparate3c')
+        mtlxRemap = self.mtlxSubNet.createNode('mtlxremap')
+        mtlxDisp = self.mtlxSubNet.createNode('mtlxdisplacement')
 
         # Set the remap out values to between -0.5 and 0.5
         mtlxRemap.parm('outlow').set(-0.5)
@@ -350,10 +331,10 @@ class MegascanUSD():
         dispOut.setInput(0, mtlxDisp)
 
         # Set the render flag
-        mtlxSubNet.setMaterialFlag(True)
+        self.mtlxSubNet.setMaterialFlag(True)
 
         # Layout the nodes in the mtlx subnet
-        mtlxSubNet.layoutChildren(items=(), horizontal_spacing=-1.0, vertical_spacing=-1.0)
+        self.mtlxSubNet.layoutChildren(items=(), horizontal_spacing=-1.0, vertical_spacing=-1.0)
         #----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -402,6 +383,27 @@ class MegascanUSD():
             exportDirs = ['No output path set. Use MegascanUSD.setOutPath(self, outPath=None)']
 
         return exportDirs
+    #--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    def createMtlxImage(self, texName):
+        nodeLoc=self.mtlxSubNet
+        fileDir=self.inPath
+        megaName=self.megaName
+
+        # Create the mtlx image node to import file to
+        mtlxImage = nodeLoc.createNode('mtlximage')
+        mtlxImage.setName(texName)
+        
+        # Use an if statement (with an elif) to single out differences with normal and displacement file names
+        # Then set file name
+        if (texName == 'Normal'):
+            mtlxImage.parm('file').set(fileDir + megaName + '_4K_' + texName + '_LOD0.jpg')
+        elif (texName == 'Displacement'):
+            mtlxImage.parm('file').set(fileDir + megaName + '_4K_' + texName + '.exr')
+        else:
+            mtlxImage.parm('file').set(fileDir + megaName + '_4K_' + texName + '.jpg')
+        
+        # Return the mtlx image node
+        return mtlxImage
     #--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
                
 #####################################################################################################################################################################################
