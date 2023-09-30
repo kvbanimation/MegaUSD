@@ -31,8 +31,8 @@ class MainWindow(qtw.QWidget):
         
         # Create the out path label and button
         self.outPath = initialOutPath
+        self.outPathButton = qtw.QPushButton("Set new save destination", clicked=lambda: self.outPathWindowOpen())
         self.outPathHelpButton = qtw.QPushButton("Help", clicked=lambda: self.helpOpen("outPath"))
-        self.outPathButton = qtw.QPushButton("Set new save destination")
         self.outPathButton.setFont(self.buttonFont)
         self.outPathHelpButton.setFont(self.buttonFont)
 
@@ -94,10 +94,18 @@ class MainWindow(qtw.QWidget):
 
         self.close()
 
+    def outPathWindowOpen(self):
+        self.hide()
+        self.outPath = hou.ui.selectFile(start_directory=self.outPath, title = 'Choose USD export folder', file_type=hou.fileType.Directory)
+        self.show()
+
     def helpOpen(self, index):
         self.hide()
-        self.helpUI = HelpUI(index, initialOutPath)
-        self.helpUI.sig.connect(self.show())
+        self.helpUI = HelpUI(index, self.outPath)
+        self.helpUI.sig.connect(self.helpClose)
+
+    def helpClose(self):
+        self.show()
 
 
 
