@@ -13,7 +13,7 @@ class MainWindow(qtw.QWidget):
     def __init__(self):
         super().__init__()
         # Add a title
-        self.setWindowTitle("Megascan to USD Settings")
+        self.setWindowTitle("Megascan to USD")
 
         # Set grid layout
         self.layout = qtw.QGridLayout()
@@ -21,6 +21,12 @@ class MainWindow(qtw.QWidget):
 
         self.buttonFont = qtg.QFont()
         self.buttonFont.setPointSize(12)
+
+        # Create the asset gallery button
+        self.assetGalleryButton = qtw.QPushButton("Choose asset gallery", clicked=lambda: self.assetGalleryWindowOpen())
+        self.assetGalleryHelpButton = qtw.QPushButton("Help", clicked=lambda: self.helpOpen("assetGallery"))
+        self.assetGalleryButton.setFont(self.buttonFont)
+        self.assetGalleryHelpButton.setFont(self.buttonFont)
         
         # Create the in paths button
         self.inPathsButton = qtw.QPushButton("Choose Megascan assets", clicked=lambda: self.inPathsWindowOpen())
@@ -42,15 +48,20 @@ class MainWindow(qtw.QWidget):
         self.exportButton.setEnabled(False)
 
         # Add the widgets
-        self.layout.addWidget(self.inPathsButton, 0, 0)
-        self.layout.addWidget(self.inPathsHelpButton, 0, 1)
-        self.layout.addWidget(self.outPathButton, 1, 0)
-        self.layout.addWidget(self.outPathHelpButton, 1, 1)
-        self.layout.addWidget(self.exportButton, 2, 1)
+        self.layout.addWidget(self.assetGalleryButton, 0, 0)
+        self.layout.addWidget(self.assetGalleryHelpButton, 0, 1)
+        self.layout.addWidget(self.inPathsButton, 1, 0)
+        self.layout.addWidget(self.inPathsHelpButton, 1, 1)
+        self.layout.addWidget(self.outPathButton, 2, 0)
+        self.layout.addWidget(self.outPathHelpButton, 2, 1)
+        self.layout.addWidget(self.exportButton, 3, 1)
 
         # Show the app
         self.show()
     
+    def assetGalleryWindowOpen():
+        pass
+
     def inPathsWindowOpen(self):
         self.hide()
         if self.inPathsWindowCheck:
