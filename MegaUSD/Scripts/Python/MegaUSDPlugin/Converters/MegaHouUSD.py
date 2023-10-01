@@ -345,8 +345,8 @@ class MegascanUSD():
         compOut.parm('thumbnailmode').set(2)
 
         # Find the imported object bounding box
-        objGeo = assetGeoNull.geometry()
-        objBbox = objGeo.boundingBox()
+        #objGeo = assetGeoNull.geometry()
+        #objBbox = objGeo.boundingBox()
 
         # Frame the found bounding box
         #geoPane = hou.ui.paneTabOfType(hou.paneTabType.SceneViewer)

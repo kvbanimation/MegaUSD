@@ -36,4 +36,7 @@ class HelpUI(qtw.QWidget):
 
     def closeHelp(self):
         self.close()
+
+    def closeEvent(self, event):
         self.sig.emit()
+        event.accept()

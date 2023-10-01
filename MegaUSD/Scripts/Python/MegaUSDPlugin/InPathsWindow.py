@@ -19,6 +19,13 @@ class InPathsWindow(qtw.QWidget):
         self.layout = qtw.QVBoxLayout()
         self.setLayout(self.layout)
 
+        # Get list of assets already in the selected asset gallery
+        galleryDS = hou.ui.sharedLayoutDataSource()
+        galleryIds = galleryDS.getItemIds()
+        galleryAssets = []
+        for id in galleryIds:
+            galleryAssets.append(galleryDS.label(id))
+
         # Get list of names
         self.megaFolderPath = megaDir
         self.megaFolders = next(os.walk(self.megaFolderPath))[1]
@@ -26,7 +33,6 @@ class InPathsWindow(qtw.QWidget):
         self.inPathsList = []
         for folder in self.megaFolders:
             megaPath = self.megaFolderPath + folder + "/"
-            self.inPathsList.append(megaPath)
 
             megaPathDirs = megaPath.split("/")
             megaFolder = megaPathDirs[-2]
@@ -39,7 +45,12 @@ class InPathsWindow(qtw.QWidget):
             jsonOpen = open(jsonFile)
             jsonData = json.load(jsonOpen)
             jsonName = jsonData.get('name')#.lower().replace(' ', '_')
-            self.names.append(jsonName)
+
+            jsonLabel = jsonName.lower().replace(' ', '_')
+
+            if jsonLabel not in galleryAssets:
+                self.names.append(jsonName)
+                self.inPathsList.append(megaPath)
 
         self.assetBoxes = []
 
@@ -82,5 +93,11 @@ class InPathsWindow(qtw.QWidget):
 
                 self.inPaths.append(self.inPathsList[index])
         
+        self.pathSelected = True
         self.hide()
         self.sig.emit()
+
+    def closeEvent(self, event):
+        self.pathSelected = False
+        self.sig.emit()
+        event.accept()

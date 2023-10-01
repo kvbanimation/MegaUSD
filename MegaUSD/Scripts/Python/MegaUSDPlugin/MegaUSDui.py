@@ -23,6 +23,8 @@ class MainWindow(qtw.QWidget):
 
         self.buttonFont = qtg.QFont()
         self.buttonFont.setPointSize(12)
+        self.labelFont = qtg.QFont()
+        self.labelFont.setPointSize(10)
 
         # Create the asset gallery button
         self.assetGalleryButton = qtw.QPushButton("Choose asset gallery", clicked=lambda: self.assetGalleryWindowOpen())
@@ -35,7 +37,7 @@ class MainWindow(qtw.QWidget):
         self.inPathsHelpButton = qtw.QPushButton("Help", clicked=lambda: self.helpOpen("inPaths"))
         self.inPathsButton.setFont(self.buttonFont)
         self.inPathsHelpButton.setFont(self.buttonFont)
-        self.inPathsWindowCheck = 0
+        self.inPathsWindowCheck = False
         
         # Create the out path label and button
         self.outPath = initialOutPath
@@ -68,7 +70,12 @@ class MainWindow(qtw.QWidget):
 
     def assetGalleryWindowClose(self):
         self.show()
-        self.inPathsWindowCheck = 0
+        self.inPathsWindowCheck = False
+        self.exportButton.setEnabled(False)
+        try:
+            self.inPathsUI.pathSelected = False
+        except:
+            pass
 
     def inPathsWindowOpen(self):
         self.hide()
@@ -77,12 +84,14 @@ class MainWindow(qtw.QWidget):
         else:
             self.inPathsUI = InPathsWindow(megascanDirectory)
             self.inPathsUI.sig.connect(self.inPathsWindowClose)
-            self.inPathsWindowCheck = 1
         
     def inPathsWindowClose(self):
         self.show()
-        self.exportButton.setEnabled(True)
-        self.inPaths = self.inPathsUI.inPaths
+        
+        if self.inPathsUI.pathSelected:
+            self.exportButton.setEnabled(True)
+            self.inPaths = self.inPathsUI.inPaths
+            self.inPathsWindowCheck = True
 
     def exportUSDs(self):
         self.curImport = 1
@@ -97,8 +106,6 @@ class MainWindow(qtw.QWidget):
         megaHou.setOutPath(self.outPath)
 
         for path in self.inPaths:
-            hou.hipFile.clear(suppress_save_prompt=True)
-            
             self.importStatus.showMessage("Working on asset " + str(self.curImport) + "/" + str(self.numImports))
             self.repaint()
             time.sleep(1)
@@ -110,6 +117,9 @@ class MainWindow(qtw.QWidget):
             megaHou.create3DAssetUSD()
             
             self.curImport += 1
+
+        hou.hipFile.clear(suppress_save_prompt=True)
+        hou.ui.setSharedLayoutDataSource(self.assetGalleryUI.assetGalleryDS)
 
         MegascanUSD.testGalleryUSD()
 
@@ -131,6 +141,9 @@ class MainWindow(qtw.QWidget):
 
 
 def startPlugin():
+    # Clear the houdini file
+    hou.hipFile.clear()
+
     # Open the Solaris desktop in houdini
     desk = hou.ui.desktop('Solaris')
     desk.setAsCurrent()
