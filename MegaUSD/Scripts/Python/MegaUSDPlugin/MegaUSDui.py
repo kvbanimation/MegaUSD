@@ -5,6 +5,7 @@ import os, json, sys, hou, time
 from .Converters.MegaHouUSD import MegascanUSD
 from .HelpUI import HelpUI
 from .InPathsWindow import InPathsWindow
+from .AssetGalleryWindow import AssetGalleryWindow
 
 initialOutPath = "C:/Users/beeks/OneDrive/Documents/houdini19.5/MegaUSD/USD EXPORTS/"
 megascanDirectory = "C:/Users/beeks/OneDrive/Documents/Megascans Library/Downloaded/3d/"
@@ -58,9 +59,14 @@ class MainWindow(qtw.QWidget):
 
         # Show the app
         self.show()
-    
-    def assetGalleryWindowOpen():
-        pass
+     
+    def assetGalleryWindowOpen(self):
+        self.hide()
+        self.assetGalleryUI = AssetGalleryWindow()
+        self.assetGalleryUI.sig.connect(self.assetGalleryWindowClose)
+
+    def assetGalleryWindowClose(self):
+        self.show()
 
     def inPathsWindowOpen(self):
         self.hide()
