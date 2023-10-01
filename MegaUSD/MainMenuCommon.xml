@@ -9,19 +9,36 @@
 
 			<separatorItem />
 		
-	  <scriptItem id="megascans_USD">
+    <scriptItem id="megascans_USD">
         <label>Megascan USD Plugin</label>
         <scriptCode><![CDATA[
-import MegaUSDPlugin.MegaUSDui as mUSDui
+import MegaUSDPlugin.MegaUSDui as MUSD
 try:
     # Python 3.7+
     from importlib import reload
 except:
     # Python 2.7
     pass
-reload(mUSDui)
-mUSDui.startPlugin()]]></scriptCode>
-      </scriptItem>
+reload(MUSD)
+MUSD.startPlugin()]]></scriptCode>
+    </scriptItem>
+
+<separatorItem />
+		
+    <scriptItem id="select_asset_gallery">
+        <label>Select Asset Gallery</label>
+        <scriptCode><![CDATA[
+import MegaUSDPlugin.AssetGalleryWindow as AGW
+try:
+    # Python 3.7+
+    from importlib import reload
+except:
+    # Python 2.7
+    pass
+reload(AGW)
+AGW.startAssetGallerySelection()]]></scriptCode>
+    </scriptItem>
+
         </subMenu>
     </menuBar>
 </mainMenu>

@@ -3,6 +3,16 @@ import PySide2.QtWidgets as qtw
 import PySide2.QtGui as qtg
 import PySide2.QtCore as qtc
 
+directCall = 0
+
+def startAssetGallerySelection():
+    # Open the Solaris desktop in houdini
+    desk = hou.ui.desktop('Solaris')
+    desk.setAsCurrent()
+    
+    directCall = 1
+    ex = AssetGalleryWindow()
+
 class AssetGalleryWindow(qtw.QWidget):
     sig = qtc.Signal()
         
@@ -95,5 +105,9 @@ class AssetGalleryWindow(qtw.QWidget):
         self.assetGalleryDS = hou.AssetGalleryDataSource(self.assetGalleryPath)
         hou.ui.setSharedLayoutDataSource(self.assetGalleryDS)
 
-        self.hide()
-        self.sig.emit()
+        if directCall==1:
+            print("directCall")
+            self.close()
+        else:
+            self.hide()
+            self.sig.emit()

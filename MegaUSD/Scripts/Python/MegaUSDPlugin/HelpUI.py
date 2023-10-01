@@ -19,7 +19,7 @@ class HelpUI(qtw.QWidget):
 
         if helpIndex=="inPaths":
             self.setWindowTitle("Megascan selection help")
-            self.info.setText("Opening the choose Megascan asset window will reveal a list of all downloaded Megascan 3D assets. Clicking on an asset will select it for conversion. Multiple assets may be selected.")
+            self.info.setText("Opening the choose Megascan asset window will reveal a list of all downloaded Megascan 3D assets. Clicking on an asset will select it for conversion. Multiple assets may be selected.\n\nWindow cannot be opened unless an asset gallery has been selected. Selection is reset each time an asset gallery is selected")
         elif helpIndex=="outPath":
             self.setWindowTitle("Output path selection help")
             self.info.setText("Selecting choose new export path will allow you to set a new folder to export to that will only be used on the current set of asset exports. In order to permanently change the export location, change the initialOutPath string variable in the MegaUSDui.py file to your preferred export folder.\n\nThe current export folder is:\n" + outPath)

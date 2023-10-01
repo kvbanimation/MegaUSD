@@ -13,6 +13,7 @@ megascanDirectory = "C:/Users/beeks/OneDrive/Documents/Megascans Library/Downloa
 class MainWindow(qtw.QWidget):
     def __init__(self):
         super().__init__()
+
         # Add a title
         self.setWindowTitle("Megascan to USD")
 
@@ -67,6 +68,7 @@ class MainWindow(qtw.QWidget):
 
     def assetGalleryWindowClose(self):
         self.show()
+        self.inPathsWindowCheck = 0
 
     def inPathsWindowOpen(self):
         self.hide()
@@ -95,6 +97,8 @@ class MainWindow(qtw.QWidget):
         megaHou.setOutPath(self.outPath)
 
         for path in self.inPaths:
+            hou.hipFile.clear(suppress_save_prompt=True)
+            
             self.importStatus.showMessage("Working on asset " + str(self.curImport) + "/" + str(self.numImports))
             self.repaint()
             time.sleep(1)
@@ -127,6 +131,10 @@ class MainWindow(qtw.QWidget):
 
 
 def startPlugin():
+    # Open the Solaris desktop in houdini
+    desk = hou.ui.desktop('Solaris')
+    desk.setAsCurrent()
+    
     ex = MainWindow()
 
 #app = qtw.QApplication(sys.argv)
