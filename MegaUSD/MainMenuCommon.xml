@@ -10,7 +10,7 @@
 			<separatorItem />
 		
     <scriptItem id="megascans_USD">
-        <label>Megascan USD Plugin</label>
+        <label>Megascan USD Converter</label>
         <scriptCode><![CDATA[
 import MegaUSDPlugin.MegaUSDui as MUSD
 try:

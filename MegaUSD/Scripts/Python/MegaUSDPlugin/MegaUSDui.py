@@ -7,8 +7,8 @@ from .HelpUI import HelpUI
 from .InPathsWindow import InPathsWindow
 from .AssetGalleryWindow import AssetGalleryWindow
 
-initialOutPath = "C:/Users/beeks/OneDrive/Documents/houdini19.5/MegaUSD/USD EXPORTS/"
-megascanDirectory = "C:/Users/beeks/OneDrive/Documents/Megascans Library/Downloaded/3d/"
+initialOutPath = "C:/Users/user/Documents/houdini19.5/MegaUSD/USD EXPORTS/" # Insert the path to the plug-in USD EXPORTS folder
+megascanDirectory = "C:/Users/user/Documents/Megascans Library/Downloaded/3d/" # Insert the path to the 3d folder inside the Megascans Library folder
 
 class MainWindow(qtw.QWidget):
     def __init__(self):
@@ -37,6 +37,7 @@ class MainWindow(qtw.QWidget):
         self.inPathsHelpButton = qtw.QPushButton("Help", clicked=lambda: self.helpOpen("inPaths"))
         self.inPathsButton.setFont(self.buttonFont)
         self.inPathsHelpButton.setFont(self.buttonFont)
+        self.inPathsButton.setEnabled(False)
         self.inPathsWindowCheck = False
         
         # Create the out path label and button
@@ -72,10 +73,13 @@ class MainWindow(qtw.QWidget):
         self.show()
         self.inPathsWindowCheck = False
         self.exportButton.setEnabled(False)
-        try:
-            self.inPathsUI.pathSelected = False
-        except:
-            pass
+        
+        if self.assetGalleryUI.gallerySelected:
+            self.inPathsButton.setEnabled(True)
+            try:
+                self.inPathsUI.pathSelected = False
+            except:
+                pass
 
     def inPathsWindowOpen(self):
         self.hide()

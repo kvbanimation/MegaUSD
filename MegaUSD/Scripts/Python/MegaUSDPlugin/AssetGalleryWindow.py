@@ -86,6 +86,8 @@ class AssetGalleryWindow(qtw.QWidget):
 
                 self.assetGalleryPath = self.galPaths[index].replace("\\", "/")
 
+        self.gallerySelected = True
+
         self.closeWindow()
     
     def createNewGal(self):
