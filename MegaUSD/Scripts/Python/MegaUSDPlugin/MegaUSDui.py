@@ -8,7 +8,17 @@ from .InPathsWindow import InPathsWindow
 from .AssetGalleryWindow import AssetGalleryWindow
 
 initialOutPath = "C:/Users/user/Documents/houdini19.5/MegaUSD/USD EXPORTS/" # Insert the path to the plug-in USD EXPORTS folder
-megascanDirectory = "C:/Users/user/Documents/Megascans Library/Downloaded/3d/" # Insert the path to the 3d folder inside the Megascans Library folder
+megascanDirectory = "C:/Users/user/Documents/Megascans Library/" # Insert the path to the Megascans Library folder
+
+# Ensure both paths end with a \
+initialOutPath = initialOutPath.replace("\\", "/")
+if initialOutPath == initialOutPath.removesuffix("/"):
+    initialOutPath = initialOutPath + "/"
+
+megascanDirectory = megascanDirectory.replace("\\", "/")
+if megascanDirectory == megascanDirectory.removesuffix("/"):
+    megascanDirectory = megascanDirectory + "/"
+megascanDirectory = megascanDirectory + "Downloaded/3d/"
 
 class MainWindow(qtw.QWidget):
     def __init__(self):

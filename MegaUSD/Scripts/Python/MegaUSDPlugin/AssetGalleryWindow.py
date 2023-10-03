@@ -86,8 +86,6 @@ class AssetGalleryWindow(qtw.QWidget):
 
                 self.assetGalleryPath = self.galPaths[index].replace("\\", "/")
 
-        self.gallerySelected = True
-
         self.closeWindow()
     
     def createNewGal(self):
@@ -103,6 +101,8 @@ class AssetGalleryWindow(qtw.QWidget):
     def closeWindow(self):
         self.assetGalleryDS = hou.AssetGalleryDataSource(self.assetGalleryPath)
         hou.ui.setSharedLayoutDataSource(self.assetGalleryDS)
+
+        self.gallerySelected = True
 
         self.close()
 

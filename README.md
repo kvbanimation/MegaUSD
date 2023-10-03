@@ -15,6 +15,7 @@ The next step is to set a few paths:
 4. Make sure the strings are raw string (r"folder\folder"), using double backslashes ("folder\\folder"), or using forwardslashes ("folder/folder")
 5. Open the json file you copied to the packages folder
 6. Set the path to the path to the plug-in folder
+7. Save both files
 
 Not required, but recommended installation steps:
 * Adding the layout asset gallery pane tab to the Solaris desktop
